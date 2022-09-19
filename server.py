@@ -22,8 +22,10 @@ while True:
         try:
             chave_conexao, endereco = servidor.accept()
             print(f'\n\nO cliente {endereco} se \033[92m conectou \033[0;0mao servidor!')
-            conectados.append([endereco, chave_conexao])
+            
             chave_conexao.send(str.encode('Você se conectou com o servidor!'))
+            nome_cliente = chave_conexao.recv(1024).decode()
+            conectados.append([endereco, chave_conexao, nome_cliente])
             
         except:
             qtde = len(conectados)
@@ -34,7 +36,7 @@ while True:
                 break
     print('\n\n\n\n\n========================MENU========================')
     for i, content in enumerate(conectados):
-        print(f'[{i}] {conectados[i][0]}')
+        print(f'[{i}] {conectados[i][2]}')
         
         numero_conectados.append(i)
 

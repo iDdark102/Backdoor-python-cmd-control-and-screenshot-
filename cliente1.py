@@ -7,7 +7,7 @@ import PIL.ImageGrab
 import base64
 
 
-
+nome_do_cliente = socket.gethostname()
 #hostname = socket.gethostname()
 #print(hostname)
 
@@ -58,6 +58,7 @@ while True:
             mensagem = cliente.recv(1024).decode()
             #Caso o servidor conecte, independente de ser o servidor certo ou nao, e mande uma mensagem, tratar a 
             #mensagem para saber se é o servidor correto.
+            cliente.send(str.encode(nome_do_cliente))
             
             if mensagem != 'Você se conectou com o servidor!':
                 #caso o servidor seja diferente, volta para tentar fazer conexão novamente.
